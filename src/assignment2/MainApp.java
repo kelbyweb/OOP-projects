@@ -7,6 +7,9 @@ import java.io.*;
  *
     @author Kelby Webster & Daniel Sparrow
  */
+
+//still need to add check for existing database before load
+//assign id for each review, make sure it's non-conflicting 
 public class MainApp {
     
 	
@@ -25,7 +28,6 @@ public class MainApp {
     	
     	int userInput;
     	int delete;
-    	String substring;
     	ReviewHandler rh = new ReviewHandler();
     	rh.loadSerialDB();
     	
@@ -47,7 +49,7 @@ public class MainApp {
             	 int polarity;
             	 path = getUserInput();
             	 polarity = getPolarity(path);
-            	 System.out.println("Please enter the polarity : (0 = negative, 1 = positive, 2 = unknown) ");
+            	 System.out.println("Please enter the polarity if known : (0 = negative, 1 = positive, 2 = unknown) ");
             	 polarity = scan.nextInt();
             	 rh.loadReviews(path, polarity);
             	 rh.saveSerialDB();
@@ -60,14 +62,55 @@ public class MainApp {
             	 break;
             	 
              case 3:
-            	 substring = scan.nextLine();
-            	 System.out.println("Please enter word : ");
-            	 substring = scan.nextLine();
-            	 List<MovieReview> searchedReviews = rh.searchBySubstring(substring);
+            	 System.out.println("Please enter 1 to search by ID or 2 to search by substring : ");
+            	 Scanner choice = new Scanner(System.in);
+            	 int choiceInt = (int)choice.nextInt();
             	 
-            	 for(MovieReview i: searchedReviews) {
+            	 if(choiceInt !=1 && choiceInt != 2)
+            	 {
+            		 System.out.println("Invalid input.");
+            		 return;
+            	 }
+            	 
+            	 if(choiceInt == 1)
+            	 {
+            		 System.out.println("Enter the ID you want to search for :");
+            		 Scanner choiceId = new Scanner(System.in);
+            		 MovieReview searchedMovie = rh.searchById(choiceId.nextInt());
             		 
-            		 System.out.printf("%-10d %10s %10d %21d %n",i.getId(),i.getFirstFiftyChars(),i.getPredictedPolarity(),i.getRealClass());
+            		 if(searchedMovie == null)
+            		 {
+            			 System.out.println("The ID you entered does not match a movie. ");
+            		 }
+            		 
+            		System.out.println("review ID: " + searchedMovie.getId());
+         			System.out.println("Review text: " + searchedMovie.getFirstFiftyChars());
+         			System.out.println("Predicted class: " + searchedMovie.getPredictedPolarity());
+         			System.out.println("Real class: " + searchedMovie.getRealClass());
+         			System.out.println();
+            	 }
+            	 
+            	 if(choiceInt == 2)
+            	 {
+            		 System.out.println("Enter the substring you want to search for : ");
+            		 Scanner userSubstring = new Scanner(System.in);
+            		 String substring = userSubstring.nextLine();
+                	 List<MovieReview> searchedReviews = rh.searchBySubstring(substring);
+                	 
+                	 if(searchedReviews.isEmpty()) 
+                	 {
+                		 System.out.println("No reviews were found that contain that substring. ");
+                		 System.out.println();
+                		 return;
+                	 }
+                	 
+                	 for(MovieReview i: searchedReviews) {
+                		 
+                		 System.out.printf("Review ID : " + i.getId());
+                		 System.out.printf("First 50 characters of review: " + i.getFirstFiftyChars());
+                		 System.out.printf("Predicted class : " + i.getPredictedPolarity());
+                		 System.out.printf("Real class : " + i.getRealClass());
+                	 }
             	 }
             	 
             	 break;
@@ -103,3 +146,4 @@ public class MainApp {
     	else
     		return 2; // unknown case
     }
+}}

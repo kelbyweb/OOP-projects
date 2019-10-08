@@ -146,4 +146,8 @@ public class MainApp {
     	else
     		return 2; // unknown case
     }
+<<<<<<< HEAD
 }}
+=======
+}
+>>>>>>> 0e823ee07b40f5c4460ef266dc2d2536c366a10c

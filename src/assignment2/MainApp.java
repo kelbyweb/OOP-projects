@@ -10,6 +10,7 @@ import java.util.Scanner;
 ** CS3354 Fall 2019 Review Handler Main Application
    @author Kelby Webster & Daniel Sparrow
 */
+
 public class MainApp {
     
 	
@@ -114,4 +115,16 @@ public class MainApp {
         return choice;
     }
     
+    
+    public static int getPolarity(String path) {
+    	
+    	String lastPath = path.substring(path.length() - 3);
+    	
+    	if(lastPath.equals("pos") || lastPath.equals("os/"))
+    		return 1; // positive case
+    	else if(lastPath.equals("neg") || lastPath.equals("eg"))
+    		return 0; // negative case
+    	else
+    		return 2; // unknown case
+    }
 }

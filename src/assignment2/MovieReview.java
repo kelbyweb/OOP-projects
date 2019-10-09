@@ -1,83 +1,91 @@
-// Kelby Webster and Daniel Sparrow
-// Assignment 2, CS 3354
-
 package assignment2;
 import java.io.Serializable;
 
 
-
+/**
+*
+** CS3354 Fall 2019 Movie Review Class implementation
+   @author Kelby Webster & Daniel Sparrow
+*/
 public class MovieReview implements Serializable {
-	
-	public int id;
-	public int realClass;
-	public int predictedPolarity;
-	public String reviewWords;
-	public String filePath;
-	public String firstFiftyChars;
-	
+	private static final long serialVersionUID=1L; //prevents output errors
 
-    public MovieReview(String reviewWords, String filePath, int realClass) {
-        this.reviewWords = reviewWords;
-        this.filePath = filePath;
-        this.realClass = realClass;
+	
+    /**
+     * The id of the review (e.g. 2087).
+     */
+    private final int id;
+
+    /**
+     *  The text of the review.
+     */
+    private final String text;
+
+    /**
+     * The predicted polarity  (0 = negative, 1 = positive).
+     */
+    private int predictedPolarity;
+
+    /**
+     * The ground truth polarity (0 = negative, 1 = positive, 2 = unknown).
+     */
+    private final int realPolarity;
+	
+	
+    /**
+     * Constructor.
+     * @param id
+     * @param text
+     * @param realPolarity
+     */
+    public MovieReview(int id, String text, int realPolarity) {
+        this.id = id;
+        this.text = text;
+        this.realPolarity = realPolarity;
+        this.predictedPolarity = 0; // Set a default value. To be changed later.
     }
 
+    /**
+     *
+     * @return id field
+     */
     public int getId() {
-        return this.id;
+        return id;
     }
 
-    public void setId(int i) {
-    	this.id = i;
-    }
-  
+    /**
+     *
+     * @return text field
+     */
     public String getText() {
-        return this.reviewWords;
+        return text;
     }
 
- 
+    /**
+     *
+     * @return predictedPolarity field
+     */
     public int getPredictedPolarity() {
-        return this.predictedPolarity;
+        return predictedPolarity;
     }
 
-
+    /**
+     *
+     * @param predictedPolarity
+     */
     public void setPredictedPolarity(int predictedPolarity) {
         this.predictedPolarity = predictedPolarity;
     }
 
-    
-    public int getRealClass() {
-        return this.realClass;
+    /**
+     *
+     * @return realPolarity
+     */
+    public int getRealPolarity() {
+        return realPolarity;
     }
 
-    
-    public String getFirstFiftyChars() { 
-    	
-        int fileSize = this.reviewWords.length();
-        String fifty;
-        
-        if(fileSize > 50) {
-            fifty = this.reviewWords.substring(0,50);
-            this.firstFiftyChars = fifty;
-        }
-        else
-            this.firstFiftyChars = this.reviewWords;
-        return this.firstFiftyChars;
-    }
 
     
-    public int reviewSubstring(String substring) {
-    	
-        int tru = -1;
-        int isTrue;
-        String review = this.reviewWords;
-        tru = review.indexOf(substring);    // returns -1 if not in index, otherwise returns index
-        
-        if(tru != -1) {        
-            isTrue = 1;
-        }
-        else
-            isTrue = 0;
-        
-        return isTrue;
-    }
 }
+

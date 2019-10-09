@@ -113,18 +113,5 @@ public class MainApp {
         System.out.println("Enter choice:");
         int choice = Integer.parseInt(scan.nextLine());
         return choice;
-    }
-    
-    
-    public static int getPolarity(String path) {
-    	
-    	String lastPath = path.substring(path.length() - 3);
-    	
-    	if(lastPath.equals("pos") || lastPath.equals("os/"))
-    		return 1; // positive case
-    	else if(lastPath.equals("neg") || lastPath.equals("eg"))
-    		return 0; // negative case
-    	else
-    		return 2; // unknown case
-    }
+    }   
 }

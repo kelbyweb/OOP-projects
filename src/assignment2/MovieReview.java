@@ -45,6 +45,7 @@ public class MovieReview implements Serializable {
         this.predictedPolarity = 0; // Set a default value. To be changed later.
     }
 
+    
     /**
      *
      * @return id field
@@ -53,6 +54,7 @@ public class MovieReview implements Serializable {
         return id;
     }
 
+    
     /**
      *
      * @return text field
@@ -61,6 +63,7 @@ public class MovieReview implements Serializable {
         return text;
     }
 
+    
     /**
      *
      * @return predictedPolarity field
@@ -69,6 +72,7 @@ public class MovieReview implements Serializable {
         return predictedPolarity;
     }
 
+    
     /**
      *
      * @param predictedPolarity
@@ -77,6 +81,7 @@ public class MovieReview implements Serializable {
         this.predictedPolarity = predictedPolarity;
     }
 
+    
     /**
      *
      * @return realPolarity
@@ -84,8 +89,6 @@ public class MovieReview implements Serializable {
     public int getRealPolarity() {
         return realPolarity;
     }
-
-
     
 }
 

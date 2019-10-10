@@ -1,6 +1,7 @@
 package assignment2;
 import assignment2.ReviewHandler;
 import java.io.*;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,7 +14,6 @@ import java.util.Scanner;
 
 public class MainApp {
     
-	
 	 /**
 		* The main function
 		* @param args to be passed in
@@ -22,109 +22,206 @@ public class MainApp {
     public static void main(String [] args) throws IOException {
     	
     	ReviewHandler rh = new ReviewHandler();
-    	
-      	int realClass = 0;
-    	
-    	// first load from serialized file if present
-    	rh.loadSerialDB();
-    	
-    	Scanner scan = new Scanner(System.in);
-    	
+      	
+     // first load from serialized file if present
+        rh.loadSerialDB();
     	
     	// display and loop with choices
-    	while(true) { 
-    		switch(menu(scan)) {
+    	boolean continueMenu = true;
+        while(continueMenu == true)
+		{
+			continueMenu = menuOptions(rh);
+		}
              
-             case 0:
-            	 // exit after saving db
-            	 scan.close();
-            	 rh.saveSerialDB();
-            	 System.out.println("Exiting program.");
-            	 System.exit(0);
-            	 break;
-            	 
-             case 1:
-            	 // ask user for path and realClass
-            	 System.out.println("Enter the path for the review or folder: ");
-            	 String filePath = scan.nextLine(); 
-            	 System.out.println("Please enter the real class if known : (0 = negative, 1 = positive, 2 = unknown) ");
-            	 realClass = Integer.parseInt(scan.nextLine());
-            	 rh.loadReviews(filePath, realClass);
-            	 rh.classifyReviews();
-            	 rh.reportAccuracy(realClass);
-            	 rh.saveSerialDB();
-            	 break;
-            	 
-             case 2:
-            	 // delete review based on its id
-            	 System.out.println("Please enter the ID of the review you want to delete : ");
-            	 int id = Integer.parseInt(scan.nextLine());
-                 rh.deleteReview(id);
-            	 break;
-            	 
-            	// search based on id or string and display results
-             case 3:
-            	 System.out.println("Enter id or substring to search for:");
-                 if(scan.hasNextInt()) {
-                     id = Integer.parseInt(scan.nextLine());
-                     MovieReview mr = rh.searchById(id);
-                     System.out.println("reviewId\tText\tPredictedClass\tRealClass");
-                     if(mr!=null) {
-                    	 System.out.printf("Review ID : " + mr.getId());
-                		 //System.out.printf("First 50 characters of review: " + mr.getFirstFiftyChars());
-                		 System.out.printf("Predicted class : " + mr.getPredictedPolarity());
-                		 System.out.printf("Real class : " + mr.getRealPolarity());
-                     }
-                     else {
-                         System.out.println("No matching reviews");
-                     }
-                 }
-                 else {
-                     String sstr = scan.nextLine();
-                     System.out.println("reviewId\tText\tPredictedClass\tRealClass");
-                     List<MovieReview> mrs = rh.searchBySubstring(sstr);
-                     for(MovieReview mr : mrs) {
-                         
-
-                         System.out.printf("Review ID : " + mr.getId());
-                		 //System.out.printf("First 50 characters of review: " + mr.getFirstFiftyChars());
-                		 System.out.printf("Predicted class : " + mr.getPredictedPolarity());
-                		 System.out.printf("Real class : " + mr.getRealPolarity());
-                     }
-                 }
-                 break;
-             }
-             
-    	}
-    	
+    }
+   
     
-}
+	 /**
+     * Handles the menu
+     * @return Whether or not to close the menu
+	 * @param rh ReviewHandler to be passed in
+	 * @throws InputMismatchException if invalid input
+	 * @throws IOException if invalid file input
+     */
+	public static boolean menuOptions(ReviewHandler rh) throws IOException
+	{
+		try
+		{
+		System.out.println("Choose an option: ");
+		System.out.println("0. Exit program.");
+		System.out.println("1. Load new movie review collection (given a folder or a file path).");
+		System.out.println("2. Delete movie review from database (given its id).");
+		System.out.println("3. Search movie reviews in database by id or by matching a substring.");
+		Scanner reader = new Scanner(System.in); 
+		int n;
+		n = reader.nextInt(); 
+		if(n > 3 || n < 0)
+		{
+			System.out.println("Invalid input.");
+			return true;
+		}
+		
+		if(n == 0)
+		{
+			rh.saveSerialDB();
+			System.out.println("Closing...");
+			System.exit(0);
+        	return false;
+		}
+		if(n == 1)
+			firstChoice(rh);
+		if(n == 2)
+			secondChoice(rh);
+		if(n == 3)
+			thirdChoice(rh);
+		}
+		catch(InputMismatchException x)
+		{
+			System.out.println("Invalid input.");
+			System.out.println();
+		}
+		return true;
+		
+	}
+    
+    
+    /**
+	* Takes user input to add a review or directory of reviews to the database.
+	* @throws NumberFormatException if invalid number
+	* @throws InputMismatchException if invalid input
+	* @param rh The ReviewHandler to be passed in
+     * @throws IOException 
+	*/
+	public static void firstChoice(ReviewHandler rh) throws NumberFormatException
+	{
+		try
+		{
+	 // ask user for path and realClass
+	 Scanner pathIn = new Scanner(System.in);
+   	 System.out.println("Enter the path for the review or folder: ");
+     String path = pathIn.nextLine(); 
+   	 System.out.println("Please enter the real class if known : (0 = negative, 1 = positive, 2 = unknown) ");
+   	 int classReal = Integer.parseInt(pathIn.nextLine());
+   	 if(classReal > 2 || classReal < 0)
+		{
+			System.out.println("Invalid input.");
+			return;
+		}
+   	 rh.loadReviews(path, classReal);
+   	 rh.classifyReviews();
+   	 if(classReal != 2) // if class is known, output accuracy
+   	 {
+     rh.reportAccuracy(classReal);
+   	 }
+     rh.saveSerialDB();
+		}
+		catch(InputMismatchException x)
+		{
+			System.out.println("Invalid input.");
+			System.out.println();
+		}
+		
+	}
+    
+    
 	/**
-	 * Displays static menu
-	 * @param scan Scanner to read in user input
-	 * @return The user's selected numerical input for the menu 
-	 */
-    public static int menu(Scanner scan)
-    {
-    	System.out.println("0. Exit program.");
-        System.out.println("1. Load new movie review collection (given a folder or a file path).");
-        System.out.println("2. Delete movie review from database (given its id).");
-        System.out.println("3. Search movie reviews in database by id or by matching a substring.");
-        System.out.println("Enter choice:");
-        int choice = Integer.parseInt(scan.nextLine());
-        return choice;
-    }
+	* Takes user input to delete a review from the database
+	* @param rh ReviewHandler to be passed in
+	* @throws InputMismatchException if invalid input
+	* @throws IOException if invalid file input
+	*/
+	public static void secondChoice(ReviewHandler rh) throws IOException
+	{
+		try
+		{
+	 // delete review based on its id
+   	 System.out.println("Please enter the ID of the review you want to delete : ");
+   	 Scanner idIn = new Scanner(System.in);
+		 rh.deleteReview(idIn.nextInt());
+		}
+		catch(InputMismatchException p)
+		{
+			System.out.println("Invalid input.");
+			System.out.println();
+		}
+	}
     
     
-    public static int getPolarity(String path) {
+	/**
+	* Takes user input to search the database by ID or substring
+	* @param rh ReviewHandler to be passed in
+	* @throws InputMismatchException if invalid input
+	*/
+	public static void thirdChoice(ReviewHandler rh)
+	{
+		 System.out.println("Enter 1 to search by ID or 2 to search by substring :");
+    	 Scanner choice = new Scanner(System.in);
+    	 
+    	 try
+			{
+    	 
+    	 int choiceInt = (int) choice.nextInt();
+    	 if(choiceInt != 1 && choiceInt != 2)
+ 		{
+ 			System.out.println("Invalid input.");
+ 			System.out.println();
+ 			return;
+ 		}
     	
-    	String lastPath = path.substring(path.length() - 3);
-    	
-    	if(lastPath.equals("pos") || lastPath.equals("os/"))
-    		return 1; // positive case
-    	else if(lastPath.equals("neg") || lastPath.equals("eg"))
-    		return 0; // negative case
-    	else
-    		return 2; // unknown case
-    }
+ 		if(choiceInt == 1) // search by ID case
+ 		{
+ 			System.out.println("Enter the id you want to search for :");
+			Scanner idChoice = new Scanner(System.in);
+			
+             MovieReview searchedMovie = rh.searchById(idChoice.nextInt());
+             if(searchedMovie == null) {
+            	 System.out.println("That ID does not match with a movie.");
+            	 System.out.println();
+ 				return;
+             }
+             else if (searchedMovie != null) {
+            	 String firstFifty = searchedMovie.getText().length() > 50 ? searchedMovie.getText().substring(0,50) : searchedMovie.getText();
+            	 
+            	 System.out.printf("Review ID : " + searchedMovie.getId() + "\n");
+        		 System.out.printf("First 50 characters of review: " + firstFifty + "\n");
+        		 System.out.printf("Predicted class : " + searchedMovie.getPredictedPolarity() + "\n");
+        		 System.out.printf("Real class : " + searchedMovie.getRealPolarity());
+        		 System.out.println();
+             }
+ 		}
+        
+         if(choiceInt == 2) // search by substring case
+         {
+        	 
+        	System.out.println("Enter the substring you want to search for :");
+        	Scanner choiceIn = new Scanner(System.in);
+			String choiceString = choiceIn.nextLine();
+			List<MovieReview> reviewList = rh.searchBySubstring(choiceString);
+			if(reviewList.isEmpty())
+			{
+				System.out.println("No reviews were found containing that string.");
+				System.out.println();
+				return;
+			}
+             
+             for(MovieReview movie : reviewList) {  
+            	 
+            	 String firstFifty = movie.getText().length() > 50 ? movie.getText().substring(0,50) : movie.getText();
+            	 
+                 System.out.printf("Review ID : " + movie.getId() + "\n");
+        		 System.out.printf("First 50 characters of review: " + firstFifty + "\n");
+        		 System.out.printf("Predicted class : " + movie.getPredictedPolarity() + "\n");
+        		 System.out.printf("Real class : " + movie.getRealPolarity());
+        		 System.out.println();
+             } 
+         }
+	}
+ 		catch(InputMismatchException i)
+		{
+			System.out.println("Invalid input.");
+			System.out.println();
+		}
+	}
 }
+    
+   

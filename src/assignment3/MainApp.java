@@ -4,7 +4,11 @@ import java.io.*;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
 *
@@ -25,6 +29,26 @@ public class MainApp {
       	
      // first load from serialized file if present
         rh.loadSerialDB();
+        
+        
+     // TODO: Components for GUI layout
+        // All of these are static private final 
+        // top panel (JPanel), bottom panel (JPanel), command label (JLabel), 
+        // combo box (JComboBox), database button (JButton), save button (JButton)
+        
+     // Output area
+        // Set as global so it can be edited in different methods
+        // static protected final output area (JTextArea),
+        // static private final output scroll pane (JScrollPane)
+        
+     // Width & height of the monitor
+        // Both are private static int
+        // width, height  (get default screen size) 
+        
+     // Width & height of the JFrame window
+        // Both are private static int
+        // windows width and height (Both JFrame)
+        
     	
     	// display and loop with choices
     	boolean continueMenu = true;
@@ -35,6 +59,62 @@ public class MainApp {
              
     }
    
+    /**
+     * Initialize the JFrame and JPanels, and show them.
+     * Also sets the location to the middle of the monitor.
+     */
+    private static void createAndDisplayGUI() {
+    	
+    	createTopPanel();
+        createBottomPanel();
+    	
+    	
+    	
+    }
+    
+    
+    /**
+     * This method initializes the top panel, which is the choice menu using a ComboBox
+     */
+    private static void createTopPanel() {
+    	
+    
+    	
+    	
+    }
+    
+    
+    
+    /**
+     * This method initialize the bottom panel, which is the output area.
+     * It's just a TextArea that is not editable
+     */
+    private static void createBottomPanel() {
+    	
+    	
+    	
+    }
+    
+    
+    
+    /**
+     * Print out the formatted JTable for list
+     @param target_List
+     */
+    public static void printJTable(List<MovieReview> target_List) {
+    	
+    	// Create columns names
+    	
+    	// Create some data from getters/setters: predicted polarity vs target 
+    	
+    	// Create a new table instance
+    	
+    	// Add the table to a scrolling pane
+    	
+    }
+    
+    
+    
     
 	 /**
      * Handles the menu
@@ -83,6 +163,15 @@ public class MainApp {
 		return true;
 		
 	}
+	
+	
+    /**
+     * Menu choice 0: save and quit.
+     */
+	 public static void exit() {
+		 
+		 
+	 }
     
     
     /**

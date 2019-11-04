@@ -1,21 +1,42 @@
-package movieReviewClassification;
-
+package assignment3;
 import java.io.Serializable;
 
-/**
-  CS3354 Spring 2019 Review Class Implementation
-    @author metsis
-    @author tesic
-    @author wen
- */
-public class MovieReview implements Serializable {
-    private static final long serialVersionUID=1L;
 
+/**
+*
+** CS3354 Fall 2019 Movie Review Class implementation
+   @author Kelby Webster & Daniel Sparrow
+*/
+public class MovieReview implements Serializable {
+	private static final long serialVersionUID=1L; //prevents output errors
+
+	
+    /**
+     * The id of the review (e.g. 2087).
+     */
+    private final int id;
+
+    /**
+     *  The text of the review.
+     */
+    private final String text;
+
+    /**
+     * The predicted polarity  (0 = negative, 1 = positive).
+     */
+    private int predictedPolarity;
+
+    /**
+     * The ground truth polarity (0 = negative, 1 = positive, 2 = unknown).
+     */
+    private final int realPolarity;
+	
+	
     /**
      * Constructor.
      * @param id
      * @param text
-     * @param realPolarity 
+     * @param realPolarity
      */
     public MovieReview(int id, String text, int realPolarity) {
         this.id = id;
@@ -24,24 +45,25 @@ public class MovieReview implements Serializable {
         this.predictedPolarity = 0; // Set a default value. To be changed later.
     }
 
-
+    
     /**
      *
-     * @return Tweet id field
+     * @return id field
      */
     public int getId() {
         return id;
     }
 
-
+    
     /**
      *
-     * @return Tweet text field
+     * @return text field
      */
     public String getText() {
         return text;
     }
 
+    
     /**
      *
      * @return predictedPolarity field
@@ -50,6 +72,7 @@ public class MovieReview implements Serializable {
         return predictedPolarity;
     }
 
+    
     /**
      *
      * @param predictedPolarity
@@ -58,33 +81,13 @@ public class MovieReview implements Serializable {
         this.predictedPolarity = predictedPolarity;
     }
 
+    
     /**
-     * 
+     *
      * @return realPolarity
      */
     public int getRealPolarity() {
         return realPolarity;
     }
-
     
-    /**
-     * The id of the review (e.g. 2087).
-     */
-    private final int id;
-    
-    /**
-     *  The text of the review.
-     */
-    private final String text;
-    
-    /**
-     * The predicted polarity of the tweet (0 = negative, 1 = positive).
-     */
-    private int predictedPolarity;
-    
-    /**
-     * The ground truth polarity of the tweet (0 = negative, 1 = positive, 2 = unknown).
-     */
-    private final int realPolarity;
-
 }

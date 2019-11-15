@@ -1,4 +1,4 @@
-package assignment3;
+package src.assignment3;
 
 import sentiment.Sentiment;
 
@@ -19,7 +19,7 @@ public abstract class AbstractReviewHandler {
         database = new HashMap<>();
         sentimentModel = new Sentiment(new File(TRAINED_MODEL_NAME));
     }
-    
+
 
     /**
      * Loads reviews from a given path. If the given path is a .txt file, then
@@ -28,12 +28,11 @@ public abstract class AbstractReviewHandler {
      * @param filePath The path to the file (or folder) containing the review(sentimentModel).
      * @param realClass The real class of the review (0 = Negative, 1 = Positive
      * 2 = Unknown).
-     * @return A list of reviews as objects.
      */
     public abstract void loadReviews(String filePath, int realClass);
-    
+
     /**
-     * Reads a single review file and returns it as a MovieReview object. 
+     * Reads a single review file and returns it as a MovieReview object.
      * This method also calls the method classifyReview to predict the polarity
      * of the review.
      * @param reviewFilePath A path to a .txt file containing a review.
@@ -92,7 +91,7 @@ public abstract class AbstractReviewHandler {
      * Saves the database in the working directory as a serialized object.
      */
     public void saveSerialDB() {
-        System.out.print("Saving database...");
+        SentimentAnalysisApp.outputArea.append("Saving database...\n");
         //serialize the database
         OutputStream file = null;
         OutputStream buffer = null;
@@ -111,14 +110,15 @@ public abstract class AbstractReviewHandler {
         } finally {
             close(file);
         }
-        System.out.println("Done.");
+        SentimentAnalysisApp.outputArea.append("Done.\n");
+
+        SentimentAnalysisApp.log.info("Database saved.\n");
     }
 
 
     /**
      * Loads review database.
      */
-    @SuppressWarnings("unchecked")
     public abstract void loadSerialDB();
 
 
@@ -139,18 +139,18 @@ public abstract class AbstractReviewHandler {
     public abstract List<MovieReview> searchBySubstring(String substring);
 
 
-    
+
     /**
-     * A map of <id, review> pairs.
+     * A map of (id, review) pairs.
      */
     protected Map<Integer, MovieReview> database;
-    
+
     /**
      * The file name of where the database is going to be saved.
      */
     protected static final String DATA_FILE_NAME = "database.ser";
-    
+
     private static final String TRAINED_MODEL_NAME = "model.ser";
-    
+
     private Sentiment sentimentModel;
-}
+

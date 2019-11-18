@@ -1,4 +1,4 @@
-package src.assignment3;
+package assignment3;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,20 +12,22 @@ import java.util.List;
 import java.util.logging.*;
 
 /**
-*
-** CS3354 Fall 2019 Review Handler Main Application
-   @author Kelby Webster 
-*/
+ *
+ ** CS3354 Fall 2019 Review Handler Main Application
+ * 
+ * @author Kelby Webster
+ */
 public class SentimentAnalysisApp extends Thread {
-	
-	// make review handler object global 
+
+    // make review handler object global
     private static final ReviewHandler rh = new ReviewHandler();
 
-    //Log
+    // Log
     static protected final Logger log = Logger.getLogger("SentimentAnalysis");
 
     /**
      * Main method demonstrates how to use Stanford NLP library classifier.
+     * 
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
@@ -58,26 +60,27 @@ public class SentimentAnalysisApp extends Thread {
             }
         });
     }
-    //Components for the layout
+
+    // Components for the layout
     static private final JPanel topPanel = new JPanel();
     static private final JPanel bottomPanel = new JPanel();;
-    static private final JLabel commandLabel = new JLabel("Please select the command",JLabel.RIGHT);
+    static private final JLabel commandLabel = new JLabel("Please select the command", JLabel.RIGHT);
     static private final JComboBox<String> comboBox = new JComboBox<String>();
     static private final JButton databaseButton = new JButton("Show Database");
     static private final JButton saveButton = new JButton("Save Database");
-    //Output area. Set as global to be edit in different methods.
+    // Output area. Set as global to be edit in different methods.
     static protected final JTextArea outputArea = new JTextArea();
     static private final JScrollPane outputScrollPane = new JScrollPane(outputArea);
-    //width and height of the monitor
+    // width and height of the monitor
     private static int width = Toolkit.getDefaultToolkit().getScreenSize().width;
     private static int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-    //width and height of the window (JFrame)
+    // width and height of the window (JFrame)
     private static int windowsWidth = 800;
     private static int windowsHeight = 600;
 
     /**
-     * Initialize the JFrame and JPanels, and show them.
-     * Also set the location to the middle of the monitor.
+     * Initialize the JFrame and JPanels, and show them. Also set the location to
+     * the middle of the monitor.
      */
     private static void createAndShowGUI() {
 
@@ -87,7 +90,7 @@ public class SentimentAnalysisApp extends Thread {
         // container for top & bottom panel
         topPanel.getIgnoreRepaint();
         JPanel panelContainer = new JPanel();
-        panelContainer.setLayout(new GridLayout(2,0));
+        panelContainer.setLayout(new GridLayout(2, 0));
         panelContainer.add(topPanel);
         panelContainer.add(bottomPanel);
 
@@ -96,7 +99,7 @@ public class SentimentAnalysisApp extends Thread {
         JFrame frame = new JFrame("Main Application GUI Window");
 
         // Save when quitting
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
@@ -111,19 +114,18 @@ public class SentimentAnalysisApp extends Thread {
 
         });
         panelContainer.setOpaque(true);
-        frame.setBounds((width - windowsWidth) / 2,
-                (height - windowsHeight) / 2, windowsWidth, windowsHeight);
+        frame.setBounds((width - windowsWidth) / 2, (height - windowsHeight) / 2, windowsWidth, windowsHeight);
         frame.setContentPane(panelContainer);
 
         frame.setVisible(true);
 
-
     }
+
     /**
      * This method initialize the top panel, which is the commands using a ComboBox
      */
     private static void createTopPanel() {
-    	// each menu option shown as a comboBox.addItem("option text")
+        // each menu option shown as a comboBox.addItem("option text")
         comboBox.addItem("Please select...");
         comboBox.addItem(" 1. Load new movie review collection (given a folder or a file path).");
         comboBox.addItem(" 2. Delete movie review from database (given its id).");
@@ -132,9 +134,8 @@ public class SentimentAnalysisApp extends Thread {
         comboBox.addItem(" 0. Exit program.");
         comboBox.setSelectedIndex(0);
 
-        
         comboBox.addItemListener(new ItemListener() {
-        	@Override
+            @Override
             public void itemStateChanged(ItemEvent e) {
                 log.info("Command chosen, Item = " + e.getItem());
                 log.info("StateChange = " + e.getStateChange());
@@ -146,7 +147,7 @@ public class SentimentAnalysisApp extends Thread {
                         topPanel.removeAll();
                         topPanel.add(commandLabel);
                         topPanel.add(comboBox);
-                        //Keep the comboBox at the first line.
+                        // Keep the comboBox at the first line.
                         topPanel.add(new JLabel());
                         topPanel.add(new JLabel());
                         topPanel.add(new JLabel());
@@ -161,7 +162,8 @@ public class SentimentAnalysisApp extends Thread {
                         topPanel.add(databaseButton);
                         topPanel.add(saveButton);
                         topPanel.updateUI();
-                    } else if (e.getItem().equals(" 1. Load new movie review collection (given a folder or a file path).")) {
+                    } else if (e.getItem()
+                            .equals(" 1. Load new movie review collection (given a folder or a file path).")) {
                         loadReviews();
                     } else if (e.getItem().equals(" 2. Delete movie review from database (given its id).")) {
                         deleteReviews();
@@ -177,8 +179,8 @@ public class SentimentAnalysisApp extends Thread {
             }
         });
 
-        // add action listener (with actionPerformed runnable/thread with run method) 
-        // for database button and save button 
+        // add action listener (with actionPerformed runnable/thread with run method)
+        // for database button and save button
         databaseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 log.info("database button clicked.");
@@ -212,14 +214,14 @@ public class SentimentAnalysisApp extends Thread {
             }
 
         });
-        
+
         // create grid layout and add command label and combo box to it
-        GridLayout topPanelGridLayout = new GridLayout(0,2,10,10);
+        GridLayout topPanelGridLayout = new GridLayout(0, 2, 10, 10);
 
         topPanel.setLayout(topPanelGridLayout);
         topPanel.add(commandLabel);
         topPanel.add(comboBox);
-        //Keep the comboBox at the first line
+        // Keep the comboBox at the first line
         // add all JLabels and buttons to topPanel then call updateUI
         topPanel.add(new JLabel());
         topPanel.add(new JLabel());
@@ -238,35 +240,38 @@ public class SentimentAnalysisApp extends Thread {
     }
 
     /**
-     * This method initialize the bottom panel, which is the output area.
-     * Just a TextArea that not editable.
+     * This method initialize the bottom panel, which is the output area. Just a
+     * TextArea that not editable.
      */
     private static void createBottomPanel() {
-    	// create new Font (Arial 18 pt) and set to output area
+        // create new Font (Arial 18 pt) and set to output area
         final Font fontArial = new Font("Arial", Font.BOLD, 20);
-        DefaultCaret caret = (DefaultCaret)outputArea.getCaret();
+        DefaultCaret caret = (DefaultCaret) outputArea.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         outputArea.setFont(fontArial);
-        
+
         // display welcome message
         outputArea.setText("Welcome to the Sentiment Analysis Review handling system!\n");
-       
+
         // set text in output area as not editable (false)
         outputArea.setEditable(false);
 
+        // text wraps for review text
+        outputArea.setLineWrap(true);
+
         // create black line border then set with outputArea.setBorder
         final Border border = BorderFactory.createLineBorder(Color.MAGENTA);
-        
+
         // create vertical & horizontal scroll bar for outputScrollPane
-        outputArea.setBorder(BorderFactory.createCompoundBorder(border,
-                BorderFactory.createEmptyBorder(20, 20, 20, 20)));
-        bottomPanel.setBorder(BorderFactory.createCompoundBorder(border,
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        outputArea
+                .setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(20, 20, 20, 20)));
+        bottomPanel
+                .setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(10, 10, 10, 10)));
         outputScrollPane.createVerticalScrollBar();
         outputScrollPane.createHorizontalScrollBar();
-        
+
         // set layout of bottomPanel to a new GridLayout(1, 0)
-        bottomPanel.setLayout(new GridLayout(1,0));
+        bottomPanel.setLayout(new GridLayout(1, 0));
         bottomPanel.add(outputScrollPane);
     }
 
@@ -275,11 +280,11 @@ public class SentimentAnalysisApp extends Thread {
      *
      */
     static int realClass = 0;
+
     public static void loadReviews() {
 
-        Thread threadLoad = new Thread()
-        {
-            public void run(){
+        Thread threadLoad = new Thread() {
+            public void run() {
 
                 outputArea.setText("");
                 outputArea.append(rh.database.size() + " records currently in database.\n");
@@ -290,18 +295,18 @@ public class SentimentAnalysisApp extends Thread {
                 topPanel.add(commandLabel);
                 topPanel.add(comboBox);
 
-                final JLabel pathLabel = new JLabel("File path:",JLabel.RIGHT);
+                final JLabel pathLabel = new JLabel("File path:", JLabel.RIGHT);
                 final JTextField pathInput = new JTextField("");
 
-                final JLabel realClassLabel = new JLabel("Real class:",JLabel.RIGHT);
+                final JLabel realClassLabel = new JLabel("Real class:", JLabel.RIGHT);
                 final JComboBox<String> realClassComboBox = new JComboBox<String>();
-                realClassComboBox.addItem("Positive");
                 realClassComboBox.addItem("Negative");
+                realClassComboBox.addItem("Positive");
                 realClassComboBox.addItem("Unknown");
-                //realClassComboBox.setSelectedIndex(0);
+                realClassComboBox.setSelectedIndex(0);
 
                 realClassComboBox.addItemListener(new ItemListener() {
-                	@Override
+                    @Override
                     public void itemStateChanged(ItemEvent e) {
                         log.info("Real class chosen, real class = " + e.getItem());
                         log.info("StateChange = " + e.getStateChange());
@@ -323,19 +328,10 @@ public class SentimentAnalysisApp extends Thread {
                 confirmButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         log.info("Confirm button clicked. (Command 1)");
-                        Runnable myRunnable = new Runnable() {
 
-                            public void run() {
-                                String path = pathInput.getText();
-                                rh.loadReviews(path, realClass);
-
-                            }
-                        };
-
-                        Thread thread = new Thread(myRunnable);
-                        thread.start();
+                        String path = pathInput.getText();
+                        rh.loadReviews(path, realClass);
                     }
-
                 });
                 topPanel.add(pathLabel);
                 topPanel.add(pathInput);
@@ -365,8 +361,8 @@ public class SentimentAnalysisApp extends Thread {
      */
     public static void deleteReviews() {
 
-        Thread threadDelete = new Thread()	{
-            public void run(){
+        Thread threadDelete = new Thread() {
+            public void run() {
 
                 outputArea.setText("");
                 outputArea.append(rh.database.size() + " records currently in database.\n");
@@ -377,7 +373,7 @@ public class SentimentAnalysisApp extends Thread {
                 topPanel.add(commandLabel);
                 topPanel.add(comboBox);
 
-                final JLabel reviewIdLabel = new JLabel("Review ID:",JLabel.RIGHT);
+                final JLabel reviewIdLabel = new JLabel("Review ID:", JLabel.RIGHT);
                 final JTextField reviewIdInput = new JTextField("");
 
                 final JButton confirmButton = new JButton("Confirm");
@@ -391,7 +387,7 @@ public class SentimentAnalysisApp extends Thread {
                                 String idStr = reviewIdInput.getText();
                                 if (!idStr.matches("-?(0|[1-9]\\d*)")) {
                                     // Input is not an integer
-                                    outputArea.append("Illegal input.\n");
+                                    outputArea.append("\nIllegal input.\n");
                                 } else {
                                     int id = Integer.parseInt(idStr);
                                     rh.deleteReview(id);
@@ -421,7 +417,8 @@ public class SentimentAnalysisApp extends Thread {
 
                 outputArea.append(rh.database.size() + " records currently in database.\n");
 
-            }};
+            }
+        };
         threadDelete.start();
     }
 
@@ -431,8 +428,8 @@ public class SentimentAnalysisApp extends Thread {
      */
     public static void searchReviewsId() {
 
-        Thread threadSearchID = new Thread()	{
-            public void run(){
+        Thread threadSearchID = new Thread() {
+            public void run() {
 
                 outputArea.setText("");
                 outputArea.append(rh.database.size() + " records currently in database.\n");
@@ -443,7 +440,7 @@ public class SentimentAnalysisApp extends Thread {
                 topPanel.add(commandLabel);
                 topPanel.add(comboBox);
 
-                final JLabel reviewIdLabel = new JLabel("Review ID:",JLabel.RIGHT);
+                final JLabel reviewIdLabel = new JLabel("Review ID:", JLabel.RIGHT);
                 final JTextField reviewIdInput = new JTextField("");
 
                 final JButton confirmButton = new JButton("Confirm");
@@ -494,7 +491,8 @@ public class SentimentAnalysisApp extends Thread {
 
                 outputArea.append(rh.database.size() + " records currently in database.\n");
 
-            }};
+            }
+        };
         threadSearchID.start();
     }
 
@@ -504,8 +502,8 @@ public class SentimentAnalysisApp extends Thread {
      */
     public static void searchReviewsSubstring() {
 
-        Thread threadSearchStr = new Thread()	{
-            public void run(){
+        Thread threadSearchStr = new Thread() {
+            public void run() {
 
                 outputArea.setText("");
                 outputArea.append(rh.database.size() + " records currently in database.\n");
@@ -516,7 +514,7 @@ public class SentimentAnalysisApp extends Thread {
                 topPanel.add(commandLabel);
                 topPanel.add(comboBox);
 
-                final JLabel subStringLabel = new JLabel("Review ID:",JLabel.RIGHT);
+                final JLabel subStringLabel = new JLabel("Enter substring:", JLabel.RIGHT);
                 final JTextField subStringInput = new JTextField("");
 
                 final JButton confirmButton = new JButton("Confirm");
@@ -563,7 +561,8 @@ public class SentimentAnalysisApp extends Thread {
 
                 outputArea.append(rh.database.size() + " records currently in database.\n");
 
-            }};
+            }
+        };
         threadSearchStr.start();
     }
 
@@ -584,6 +583,8 @@ public class SentimentAnalysisApp extends Thread {
         final JButton confirmButton = new JButton("Confirm");
         confirmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                outputArea.append("Database saved. Window will be closed in 5 seconds.\n");
+                outputArea.append("Thank you for using the system!\n");
                 log.info("Confirm button clicked. (Command 0)");
                 Runnable myRunnable = new Runnable() {
 
@@ -627,7 +628,7 @@ public class SentimentAnalysisApp extends Thread {
         topPanel.add(saveButton);
         topPanel.updateUI();
         topPanel.updateUI();
-    }
+   }
 
 
     /**

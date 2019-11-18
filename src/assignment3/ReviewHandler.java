@@ -1,4 +1,4 @@
-package src.assignment3;
+package assignment3;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -37,23 +37,23 @@ public class ReviewHandler extends AbstractReviewHandler {
                     // Add to database
                     database.put(review.getId(), review);
                     //Output result: single file
-                    SentimentAnalysisApp.outputArea.append("Review imported.");
+                    SentimentAnalysisApp.outputArea.append("Review imported.\n");
                     SentimentAnalysisApp.outputArea.append("ID: " + review.getId());
-                    SentimentAnalysisApp.outputArea.append("Text: " + review.getText());
-                    SentimentAnalysisApp.outputArea.append("Real Class: " + review.getRealPolarity());
-                    SentimentAnalysisApp.outputArea.append("Classification result: " + review.getPredictedPolarity());
+                    SentimentAnalysisApp.outputArea.append("\nText: " + review.getText());
+                    SentimentAnalysisApp.outputArea.append("\n\nReal Class: " + review.getRealPolarity());
+                    SentimentAnalysisApp.outputArea.append("\nClassification result: " + review.getPredictedPolarity());
                     if (realClass == 2) {
-                    	SentimentAnalysisApp.outputArea.append("Real class unknown.");
+                    	SentimentAnalysisApp.outputArea.append("\nReal class unknown.");
                     } else if (realClass == review.getPredictedPolarity()) {
-                        SentimentAnalysisApp.outputArea.append("Correctly classified.");
+                        SentimentAnalysisApp.outputArea.append("\nCorrectly classified.");
                     } else {
-                        SentimentAnalysisApp.outputArea.append("Misclassified.");
+                        SentimentAnalysisApp.outputArea.append("\nMisclassified.");
                     }
                     SentimentAnalysisApp.outputArea.append("\n");
 
                 } else {
                     // Cannot import non-txt files
-                    SentimentAnalysisApp.outputArea.append("Input file path is neither a txt file nor folder.");
+                    SentimentAnalysisApp.outputArea.append("\nInput file path is neither a txt file nor folder.");
                     return;
                 }
             } else {
@@ -78,13 +78,13 @@ public class ReviewHandler extends AbstractReviewHandler {
                 }
                 // Output result: folder
                 SentimentAnalysisApp.outputArea.append("Folder imported.");
-                SentimentAnalysisApp.outputArea.append("Number of entries: " + files.length);
+                SentimentAnalysisApp.outputArea.append("\nNumber of entries: " + files.length);
 
                 // Only output accuracy if real class is known
                 if (realClass != 2) {
-                    SentimentAnalysisApp.outputArea.append("Correctly classified: " + counter);
-                    SentimentAnalysisApp.outputArea.append("Misclassified: " + (files.length - counter));
-                    SentimentAnalysisApp.outputArea.append("Accuracy: " + ((double)counter / (double)files.length * 100) + "%");
+                    SentimentAnalysisApp.outputArea.append("\nCorrectly classified: " + counter);
+                    SentimentAnalysisApp.outputArea.append("\nMisclassified: " + (files.length - counter));
+                    SentimentAnalysisApp.outputArea.append("\nAccuracy: " + ((double)counter / (double)files.length * 100) + "%\n");
                 }
             }
         } catch (IOException e) {
@@ -134,10 +134,10 @@ public class ReviewHandler extends AbstractReviewHandler {
 
         if (!database.containsKey(id)) {
             // Review with given ID does not exist
-            SentimentAnalysisApp.outputArea.append("ID " + id + " does not exist.");
+            SentimentAnalysisApp.outputArea.append("\nID " + id + " does not exist.");
         } else {
             database.remove(id);
-            SentimentAnalysisApp.outputArea.append("Review with ID " + id + " deleted.");
+            SentimentAnalysisApp.outputArea.append("\nReview with ID " + id + " deleted.");
         }
         return;
     }
@@ -148,7 +148,7 @@ public class ReviewHandler extends AbstractReviewHandler {
     @Override
     @SuppressWarnings("unchecked")
     public void loadSerialDB() {
-        SentimentAnalysisApp.outputArea.append("Reading database...");
+        SentimentAnalysisApp.outputArea.append("\nReading database...");
         // serialize the database
         InputStream file = null;
         InputStream buffer = null;
@@ -182,7 +182,7 @@ public class ReviewHandler extends AbstractReviewHandler {
         } finally {
             close(file);
         }
-        SentimentAnalysisApp.outputArea.append("Done.\n");
+        SentimentAnalysisApp.outputArea.append("\nDone.\n");
     }
 
     /**
